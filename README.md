@@ -10,11 +10,13 @@ Usage
 -----
 
 First, configure ~/.i3status.conf
+```
  general {
         output_format = "i3bar"
         colors = true
         interval = 15
  }
+```
 
 I set the interval to 15 to be kinder to icinga, our box is under enough load
 as it is.
@@ -22,19 +24,21 @@ as it is.
 Next, configure the nagios/icinga credentials in ~/.nagios-creds.yaml (edit to
 make it a name you like, and add your host info there:
 
+```yaml
  ---
  host: <icinga host>
  port: <port>
  proto: <http or https>
  auth_key: <your auth key>
  proxy: <optional>
+```
 
 Copy the script to ~/i3status/contrib/i3_icinganagger.py
 
 Edit your ~/.i3/config bar section:
-
+```
  bar {
         status_command i3status | ~/i3status/contrib/i3_icinganagger.py
  }
-
+```
 Now restart i3.
