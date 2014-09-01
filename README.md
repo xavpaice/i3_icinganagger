@@ -6,6 +6,9 @@ http://code.stapelberg.de/git/i3status/plain/contrib/wrapper.py to enable
 checking icinga status for warnings without having the page open all the time.
 It puts a little text in i3bar, and sends annoying toaster messages.
 
+A simple console only version (i.e. just the text) is included (txtnagger.py)
+so if you want, you can get similar info via ssh without any graphics.
+
 Usage
 -----
 
