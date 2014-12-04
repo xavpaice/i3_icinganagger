@@ -45,3 +45,42 @@ Edit your ~/.i3/config bar section:
  }
 ```
 Now restart i3.
+
+
+Alternative wrapper for Nagios
+==============================
+
+Same thing as above, but this version uses Paramiko to grab the status.dat file
+from a remote Nagios box, and parse it.  That way, we don't need the Icinga API.
+
+Usage
+-----
+
+You'll need to have the python-pynag package installed. I've tested this on
+Ubuntu Trusty only.
+
+Ensure SSH key exchange is done, and your user has access to the status.dat file.
+
+Add a file ~/.nagios-hosts.yaml
+```yaml
+ ---
+ Server1:
+   statfile: '/var/lib/icinga/status.dat'
+   host: 'server1hostname'
+   username: 'username'
+ Server2:
+   statfile: '/var/lib/icinga/status.dat'
+   host: 'server2hostname'
+   username: 'username'
+```
+
+Copy the script to ~/i3status/contrib/i3_nagstatus.py
+
+Edit your ~/.i3/config bar section:
+```
+ bar {
+     status_command i3status | ~/i3status/contrib/i3_nagstatus.py
+ }
+```
+
+Now restart i3.
