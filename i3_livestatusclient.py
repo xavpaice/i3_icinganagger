@@ -53,36 +53,28 @@ def notify(warnings, criticals):
 
 
 def get_livestatus(host, port):
-    print "livestatus called with %s : %s" % (host, port)
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print 'made socket'
     except socket.error:
-        print 'Failed to create socket'
         sys.exit()
 
     try:
         remote_ip = socket.gethostbyname(host)
-        print "got ip of %s" % remote_ip
 
     except socket.gaierror:
         #could not resolve
-        print 'Hostname could not be resolved. Exiting'
         sys.exit()
 
     #Connect to remote server
     s.connect((remote_ip , port))
-    print 'socket open'
 
     try :
         s.sendall('hitme')
     except socket.error:
         #Send failed
-        print 'Send failed'
         sys.exit()
 
     reply = s.recv(16384)
-    print 'got to the point of closing socket'
     s.close()
     return json.loads(reply)
 
@@ -92,8 +84,6 @@ def run_checks(warnings, criticals, **conf):
     current_status['critical'] = 0
     current_status['warning'] = 0
     for server in conf:
-        print conf
-        print server
         try:
             current_status[server] = get_livestatus(conf[server]['host'],
                                                     conf[server]['port'])
@@ -142,7 +132,7 @@ def process_results(current_result):
     warnings = current_result['warning']
     for key, value in current_result.iteritems():
         if key not in ('color', 'changed', 'critical', 'warning'):
-            text = text + "| %s: W: %d C: %d " % (key,
+            text = text + ":: %s: W: %d C: %d " % (key,
                                                   value['warning'],
                                                   value['critical'])
     # send gtk notification if there's a change
