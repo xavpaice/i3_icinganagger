@@ -1,33 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# This script is a simple wrapper which prefixes each i3status line with custom
-# information. It is a python reimplementation of:
-# http://code.stapelberg.de/git/i3status/tree/contrib/wrapper.pl
-#
-# To use it, ensure your ~/.i3status.conf contains this line:
-#     output_format = "i3bar"
-# in the 'general' section.
-# Then, in your ~/.i3/config, use:
-#     status_command i3status | ~/i3status/contrib/i3_icinganagger.py
-# In the 'bar' section.
-#
-# © 2012 Valentin Haenel <valentin.haenel@gmx.de>
-# Copyright (c) 2014 Catalyst.net Ltd
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-# 
-
 
 # quick checker for nagios status
 
@@ -72,7 +43,8 @@ def get_statusfiles(services):
     for region in services.keys():
         services[region]['pulled_statfile'] = '/tmp/' + region + 'status.dat'
         ssh.connect(services[region]['host'],
-                    username=services[region]['username'])
+                    username=services[region]['username'],
+                    timeout=10)
         ftp = ssh.open_sftp()
         ftp.get(services[region]['statfile'],
                 services[region]['pulled_statfile'])

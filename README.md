@@ -6,8 +6,13 @@ http://code.stapelberg.de/git/i3status/plain/contrib/wrapper.py to enable
 checking icinga status for warnings without having the page open all the time.
 It puts a little text in i3bar, and sends annoying toaster messages.
 
-A simple console only version (i.e. just the text) is included (txtnagger.py)
-so if you want, you can get similar info via ssh without any graphics.
+Requirements
+------------
+
+* Icinga or Nagios
+* the server needs mklivestatus
+* I've included a little widget 'livestatus.py' that you can run on the nagios server
+
 
 Usage
 -----
@@ -24,27 +29,42 @@ First, configure ~/.i3status.conf
 I set the interval to 15 to be kinder to icinga, our box is under enough load
 as it is.
 
-Next, configure the nagios/icinga credentials in ~/.nagios-creds.yaml (edit to
+Next, configure the nagios/icinga credentials in ~/.nagios.yaml (edit to
 make it a name you like, and add your host info there:
+
+```yaml
+ ---
+ <icinga-server-name>:
+   host: <icinga host>
+   port: <port>
+ <another-nagios-server>:
+   host: <icinga host>
+   port: <port>
+```
+
+Copy the script to ~/i3status/contrib/i3_livestatusclient.py
+
+Edit your ~/.i3/config bar section:
+```
+ bar {
+        status_command i3status | ~/i3status/contrib/i3_livestatusclient.py
+ }
+```
+Now restart i3.
+
+
+Alternative wrapper for Icinga-web
+==================================
+
+Use i3_icinganagger.py instead if you have the icinga-web package installed and the API running.
+
+This one only supports a single Icinga server, the format of the yaml is:
 
 ```yaml
  ---
  host: <icinga host>
  port: <port>
- proto: <http or https>
- auth_key: <your auth key>
- proxy: <optional>
 ```
-
-Copy the script to ~/i3status/contrib/i3_icinganagger.py
-
-Edit your ~/.i3/config bar section:
-```
- bar {
-        status_command i3status | ~/i3status/contrib/i3_icinganagger.py
- }
-```
-Now restart i3.
 
 
 Alternative wrapper for Nagios
